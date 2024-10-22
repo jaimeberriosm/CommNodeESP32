@@ -29,17 +29,18 @@ print(M)
 #Fabricar vector de entrada y vector objetivo para entrenamiento
 tam_input=5   # Cantidad de Datos de entrada
 tam_train=0.8 # Proporcion de datos para entrenamiento y prueba
+norm=10000    # Normalizacion
 l_train=int(len(Ptotal)*0.8)
 l_test=int(len(Ptotal)-l_train)
 
 Ptotal_test=np.array(Ptotal[l_train:len(Ptotal)])
 
-input_train=np.array([Ptotal[i:i+tam_input]for i in range(l_train-tam_input)])
-obj_train=np.array(Ptotal[tam_input:l_train])
+input_train=np.array([Ptotal[i:i+tam_input]for i in range(l_train-tam_input)])/norm
+obj_train=np.array(Ptotal[tam_input:l_train])/norm
 
 
-input_test=np.array([Ptotal_test[i:i+tam_input]for i in range(l_test-tam_input)])
-obj_test=np.array(Ptotal_test[5:l_test])
+input_test=np.array([Ptotal_test[i:i+tam_input]for i in range(l_test-tam_input)])/norm
+obj_test=np.array(Ptotal_test[5:l_test])/norm
 
 # print(input_train)
 # print('____________________________________')
@@ -53,4 +54,14 @@ obj_test=np.array(Ptotal_test[5:l_test])
 # print(input_test)
 # print(obj_test)
 
+regr=MLPRegressor(hidden_layer_sizes=10, activation='tanh', max_iter=2000).fit(input_train,obj_train)
+output=regr.predict(input_test)
+res=regr.score(input_test,obj_test)
+t_test=pd.array(t[l_train+5:len(Ptotal)])
 
+print(res)
+print(output*norm)
+
+plt.plot(t_test,output*norm)
+plt.plot(t_test,Ptotal_test[5:len(Ptotal_test)])
+plt.show()
