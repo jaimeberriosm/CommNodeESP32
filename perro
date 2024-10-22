@@ -1,0 +1,29 @@
+import pandas as pd
+import numpy as np
+import datetime
+import matplotlib.pyplot as plt
+
+
+
+df = pd.read_csv(r'C:\Users\Jaime Berrios\OneDrive - usach.cl\DOCTORADO\MICRORREDES\DB_Microrred\Datos Corregidos\P-Total\2022\PTotal_Sept2022.csv')
+
+
+
+print(df)
+
+Ptotal=df.get('dbl_v')
+Ptotal=Ptotal.tolist()
+ts=df.get('ts')
+ts=ts.tolist()
+t=[]
+
+
+t=list(map(lambda x: datetime.datetime.fromtimestamp(x/1000),ts))
+M=pd.Series(Ptotal,t)
+print(M)
+
+
+#print(Ptotal.loc[0])
+
+M.plot()
+plt.show()
