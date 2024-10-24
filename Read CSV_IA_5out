@@ -18,7 +18,7 @@ t=[]
 
 t=list(map(lambda x: datetime.datetime.fromtimestamp(x/1000),ts))
 M=pd.Series(Ptotal,t)
-print(M)
+# print(M)
 
 
 #print(Ptotal.loc[0])
@@ -35,33 +35,60 @@ l_train=int(len(Ptotal)*0.8)
 l_test=int(len(Ptotal)-l_train)
 
 Ptotal_test=np.array(Ptotal[l_train:len(Ptotal)])
+t_test=np.array(t[l_train:len(t)])
+
+
+
 
 input_train=np.array([Ptotal[i:i+tam_input]for i in range(l_train-tam_input)])/norm
 obj_train=np.array(Ptotal[tam_input:l_train])/norm
+
+
+
 #obj_train=np.array([Ptotal[i:i+tam_output]for i in range(l_train-tam_output)])/norm
 
 input_test=np.array([Ptotal_test[i:i+tam_input]for i in range(l_test-tam_input)])/norm
 obj_test=np.array(Ptotal_test[5:l_test])/norm
+
+# plt.plot(t_test[0:len(t_test)-5],obj_test*norm)
+# plt.plot(t_test,Ptotal_test)
+# plt.show()
+
 #obj_test=np.array([Ptotal_test[i:i+tam_input]for i in range(l_test-tam_output)])/norm
-# print(input_train)
-# print('____________________________________')
-# print(obj_train)
+
+
+
+print(f'Los datos de entrada del entrenamiento son:\n {input_train}')
+print('____________________________________')
+print(f'Los datos objetivo del entrenamientoson:\n {obj_train}')
+if len(input_train)==len(obj_train):
+    print(f'la longitud de los vectores de entrenamiento es la misma y es de {len(obj_train)}')
 # print(len(input_train))
 # print(len(obj_train))
-# print('____________________________________')
+print('____________________________________')
 # print(len(Ptotal_test))
 # print(l_test)
 # print('____________________________________')
-# print(input_test)
-# print(obj_test)
+print(f'los datos de entrada del test son:\n{input_test}')
+print(f'los datos objetivos del test son:\n{obj_test}')
+if len(input_test)==len(obj_test):
+    print(f'la longitud de los vectores de prueba es la misma y es de {len(obj_test)}')
 
+# print(l_train)
+# print(Ptotal_test[5])
+# print(l_test)
+# ni=204415
+# print(f'el valor de la posicion {ni} es {Ptotal[ni]/norm}')
+
+
+# Declaracion de Red Neuronal
 regr=MLPRegressor(hidden_layer_sizes=10, activation='tanh', max_iter=1000000, tol=1e-10, alpha=0.00001).fit(input_train,obj_train)
 output=regr.predict(input_test)
 res=regr.score(input_test,obj_test)
-t_test=pd.array(t[l_train+5:len(Ptotal)])
 
-print(res)
-print(output*norm)
+
+# # print(res)
+# # print(output*norm)
 
 print(f"Number of inputs:  {regr.n_features_in_}")
 print(f"Number of outputs: {regr.n_outputs_}")
@@ -71,15 +98,16 @@ print(f"Layer sizes: {[l.shape for l in regr.coefs_]}")
 plt.figure(0)
 plt.plot(regr.loss_curve_)
 plt.figure(1)
-plt.plot(t_test,output*norm)
-plt.plot(t_test,Ptotal_test[5:len(Ptotal_test)])
-print(regr.coefs_)
-print(regr.intercepts_)
-print(regr.out_activation_)
+plt.plot(t_test[0:len(t_test)-5],output*norm)
+plt.plot(t_test,Ptotal_test)
+print(regr.coefs_)            # Pesos de la NN
+print(regr.intercepts_)       # Biases de la NN
+print(regr.out_activation_)   # Funcion de activacion de salida
 #print.dir(regr)
 
-
-
+plt.figure(2)
+plt.plot(t[204411:len(t)],Ptotal_test)
+plt.plot(t,Ptotal)
 
 plt.show()
 
