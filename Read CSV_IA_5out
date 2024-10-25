@@ -100,14 +100,24 @@ plt.plot(regr.loss_curve_)
 plt.figure(1)
 plt.plot(t_test[0:len(t_test)-5],output*norm)
 plt.plot(t_test,Ptotal_test)
+plt.plot(t,Ptotal)
+plt.plot(t_test[0:len(t_test)-5],obj_test*norm)
+
+
+
+
 print(regr.coefs_)            # Pesos de la NN
 print(regr.intercepts_)       # Biases de la NN
 print(regr.out_activation_)   # Funcion de activacion de salida
-#print.dir(regr)
 
-plt.figure(2)
-plt.plot(t[204411:len(t)],Ptotal_test)
-plt.plot(t,Ptotal)
+
+f=open('pesos_bias.txt','w')
+f.write('Los pesos de la red neuronal son:\n')
+f.write(', '.join(map(str,regr.coefs_)))
+f.write('Los biases de la red neuronal son:\n')
+f.write(', '.join(map(str,regr.intercepts_)))
+f.close()
+
 
 plt.show()
 
